@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class LambdaFactory {
 
@@ -74,6 +75,24 @@ public class LambdaFactory {
             @SuppressWarnings("unchecked")
             // the whole point of the class template and runtime compilation is to make this cast work well :-)
                     T lambda = (T) lambdaReturningMethod.invoke(null);
+            return lambda;
+        } catch (ReflectiveOperationException | RuntimeException | NoClassDefFoundError e) {
+            // NoClassDefFoundError can be thrown if provided parent class loader cannot load classes used by the lambda
+            throw new LambdaCreationException(e);
+        } catch (ClassCompilationException classCompilationException) {
+            // that catch differs from the catch above as the exact exception type is known and additional details can be extracted
+            throw new LambdaCreationException(classCompilationException);
+        }
+    }
+
+    public Function createLambda(String code, String typeReference) throws LambdaCreationException {
+        String helperClassSource = helperProvider.getHelperClassSource(typeReference, code, imports, staticImports);
+        try {
+            Class<?> helperClass = classFactory.createClass(helperProvider.getHelperClassName(), helperClassSource, javaCompiler, createOptionsForCompilationClasspath(compilationClassPath), parentClassLoader);
+            Method lambdaReturningMethod = helperClass.getMethod(helperProvider.getLambdaReturningMethodName());
+            @SuppressWarnings("unchecked")
+            // the whole point of the class template and runtime compilation is to make this cast work well :-)
+                    Function lambda = (Function) lambdaReturningMethod.invoke(null);
             return lambda;
         } catch (ReflectiveOperationException | RuntimeException | NoClassDefFoundError e) {
             // NoClassDefFoundError can be thrown if provided parent class loader cannot load classes used by the lambda

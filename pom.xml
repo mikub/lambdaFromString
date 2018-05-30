@@ -17,18 +17,10 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <name>Paweł Chorążyk</name>
-            <email>joegreen+github@joegreen.pl</email>
-            <url>http://joegreen.pl</url>
-        </developer>
-    </developers>
-
     <scm>
-        <connection>scm:git:git@github.com:greenjoe/lambdaFromString.git</connection>
-        <developerConnection>scm:git:git@github.com:greenjoe/lambdaFromString.git</developerConnection>
-        <url>git@github.com:greenjoe/lambdaFromString.git</url>
+        <connection>scm:git:git@github.com:mikub/lambdaFromString.git</connection>
+        <developerConnection>scm:git:git@github.com:mikub/lambdaFromString.git</developerConnection>
+        <url>git@github.com:mikub/lambdaFromString.git</url>
       <tag>HEAD</tag>
   </scm>
 
@@ -117,28 +109,4 @@
     </build>
 
 
-    <profiles>
-        <profile>
-            <id>gpg</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-    </profiles>
 </project>
